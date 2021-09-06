@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+echo ""
+echo " Download archived target pages from wayback by waybackpack and fetch urls with httpx, by B4GG3R"
+echo " waybackdownload https://target.com/targetpage output"
+echo ""
+
+        # get the archived urls for the targets directory with waybackpack https://github.com/jsvine/waybackpack
+waybackpack ""$1"" --list >> waybackpack-output
+
+        # fetching urls with httpx (https://github.com/projectdiscovery/httpx) with 5 threads, you can make it more and this tool removes 301,302,404 pages automatically then downloading pages with wget
+for url in $(cat waybackpack-output | httpx -silent -status-code -no-color | grep -Ev -e '\[302]' -e '\[301]' -e '\[404]' | awk -F' ' '{print $1}'); do wget $url; done
+
+        # finally removing waybackpack-output, thats usef if you want to automate this tool for multiple urls.
+rm -r waybackpack-output
+

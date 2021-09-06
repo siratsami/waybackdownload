@@ -13,5 +13,5 @@ waybackpack ""$1"" --list >> waybackpack-output
 for url in $(cat waybackpack-output | httpx -silent -status-code -no-color | grep -Ev -e '\[302]' -e '\[301]' -e '\[404]' | awk -F' ' '{print $1}'); do wget $url; done
 
         # finally removing waybackpack-output, thats usef if you want to automate this tool for multiple urls.
-rm -r waybackpack-output
+rm waybackpack-output
 
